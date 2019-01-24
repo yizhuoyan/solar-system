@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <style>
+            body {
+                margin: 0;
+                height: 100vh;
+                background: #000;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            img {
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <canvas></canvas>
+        <img id="earth" src="img/earth.png" />
+        <img id="jupiter" src="img/jupiter.png">
+        <img id="mars" src="img/mars.png">
+        <img id="mercury" src="img/mercury.png">
+        <img id="moon" src="img/moon.png">
+
+        <img id="neptune" src="img/neptune.png">
+        <img id="saturn" src="img/saturn.png">
+        <img id="sun" src="img/sun.png">
+        <img id="uranus" src="img/uranus.png">
+        <img id="venus" src="img/venus.png">
+        <script src="js/Stars.js"></script>
+        <script src="js/Sun.js"></script>
+        <script src="js/Earth.js"></script>
+        <script src="js/Moon.js"></script>
+        <script src="js/Mercury.js"></script>
+        <script src="js/Venus.js"></script>
+        <script src="js/Mars.js"></script>
+        <script src="js/Jupiter.js"></script>
+        <script src="js/Saturn.js"></script>
+        <script src="js/Uranus.js"></script>
+        <script src="js/Neptune.js"></script>
+
+        <script>
+            const $ = function(id) {
+                return document.getElementById(id);
+            };
+
+            window.onload = function() {
+                const cvs = document.querySelector("canvas");
+                cvs.width = document.body.offsetWidth;
+                cvs.height = document.body.offsetHeight;
+
+                //天体最大公转半径
+                const maxRadius = Math.max(cvs.width, cvs.height) / 2;
+
+                
+
+                const g = cvs.getContext('2d');
+                g.PI2 = Math.PI * 2;
+
+                const stars = new Stars(cvs);
+                //太阳
+                const sun = new Sun(cvs);
+                //地球相当于太阳公转的单位速度
+                sun.earthRus=0.001;
+                //计算各行星公转单位半径
+                sun.rur = maxRadius / 40;
+
+                //1水星
+                const mercury = new Mercury(sun);
+                //2金星
+                const venus = new Venus(sun);
+                //3地球
+                const earth = new Earth(sun);
+                
+                
+                //4火星
+                const mars = new Mars(sun);
+                //5木星
+                const jupiter = new Jupiter(sun);
+                //6 土星
+                const saturn = new Saturn(sun);
+                //7天王星
+                const uranus = new Uranus(sun);
+                //8海王星
+                const neptune = new Neptune(sun);
+
+
+                let run = function() {
+                    stars.paint(g);
+                    g.save();
+                    g.translate(cvs.width / 2, cvs.height / 2);
+                    sun.paint(g);
+
+                    earth.paint(g);
+
+                    mercury.paint(g);
+                    venus.paint(g);
+                    mars.paint(g);
+                    jupiter.paint(g);
+                    saturn.paint(g);
+                    uranus.paint(g);
+                    neptune.paint(g);
+                    g.restore();
+                    requestAnimationFrame(run);
+                };
+                run();
+            }
+        </script>
+    </body>
+</html>
